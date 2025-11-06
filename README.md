@@ -251,6 +251,7 @@
             const possibleMoves = getAllMoves(color, board);
 
             if (possibleMoves.length === 0) {
+                // Simplified check: assume checkmate/stalemate means extreme score
                 return isMaximizingPlayer ? -9999 : 9999;
             }
 
@@ -278,7 +279,7 @@
         };
 
         const getAIMove = (board, difficulty) => {
-            const MAX_DEPTH = (difficulty === 'easy') ? 1 : (difficulty === 'medium' ? 2 : 2);
+            const MAX_DEPTH = (difficulty === 'easy') ? 1 : (difficulty === 'medium' ? 2 : 2); // Hard uses 2 for performance, could be higher
 
             const color = 'black';
             const possibleMoves = getAllMoves(color, board);
@@ -291,6 +292,7 @@
             for (const { from: fromId, moves } of possibleMoves) {
                 for (const toId of moves) {
                     const newBoard = simulateMove(board, fromId, toId);
+                    // AI is maximizing (black), so it checks the evaluation from white's perspective (false)
                     const evaluation = minimax(newBoard, MAX_DEPTH - 1, false);
 
                     if (evaluation > maxEval) {
@@ -513,6 +515,7 @@
                         if (move) {
                             performMove(move.fromId, move.toId, board, captured);
                         } else {
+                            // Simplified stalemate check
                             setGameOver('draw');
                             setMessage("Stalemate! (No legal moves for the computer)");
                             onGameOver('draw');
@@ -786,4 +789,5 @@
     </script>
 </body>
 </html>
+
 
